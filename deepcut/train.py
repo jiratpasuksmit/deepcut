@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # encoding: utf-8
 import os
-from glob import glob
-import pandas as pd
 from functools import reduce
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import precision_score, recall_score, f1_score
+from glob import glob
+
+import pandas as pd
 from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
+from sklearn.metrics import precision_score, recall_score, f1_score
+from sklearn.model_selection import train_test_split
 
 if __package__ != 'deepcut':
     from utils import create_n_gram_df, CHAR_TYPE_FLATTEN, CHARS_MAP, CHAR_TYPES_MAP
@@ -17,6 +18,7 @@ else:
 
 article_types = ['article', 'encyclopedia', 'news', 'novel']
 
+
 def generate_words(files):
     """
     Transform list of files to list of words,
@@ -24,7 +26,7 @@ def generate_words(files):
     and replace name entity '<NE>...</NE>' and abbreviation '<AB>...</AB>' symbol
     """
 
-    repls = {'<NE>' : '','</NE>' : '','<AB>': '','</AB>': ''}
+    repls = {'<NE>': '', '</NE>': '', '<AB>': '', '</AB>': ''}
 
     words_all = []
     for i, file in enumerate(files):
@@ -94,7 +96,8 @@ def generate_best_dataset(best_path, output_path='cleaned_data', create_val=Fals
             files_train, files_val = train_test_split(files_train, random_state=0, test_size=0.1)
             val_words = generate_words(files_val)
             val_df = create_char_dataframe(val_words)
-            val_df.to_csv(os.path.join(output_path, 'val', 'df_best_{}_val.csv'.format(article_type)), random_state=0, index=False)
+            val_df.to_csv(os.path.join(output_path, 'val', 'df_best_{}_val.csv'.format(article_type)), random_state=0,
+                          index=False)
         train_words = generate_words(files_train)
         test_words = generate_words(files_test)
         train_df = create_char_dataframe(train_words)
@@ -116,15 +119,16 @@ def prepare_feature(best_processed_path, option='train'):
     """
     # padding for training and testing set
     n_pad = 21
-    n_pad_2 = int((n_pad - 1)/2)
+    n_pad_2 = int((n_pad - 1) / 2)
     pad = [{'char': ' ', 'type': 'p', 'target': True}]
     df_pad = pd.DataFrame(pad * n_pad_2)
 
     df = []
     for article_type in article_types:
-        df.append(pd.read_csv(os.path.join(best_processed_path, option, 'df_best_{}_{}.csv'.format(article_type, option))))
+        df.append(
+            pd.read_csv(os.path.join(best_processed_path, option, 'df_best_{}_{}.csv'.format(article_type, option))))
     df = pd.concat(df)
-    df = pd.concat((df_pad, df, df_pad)) # pad with empty string feature
+    df = pd.concat((df_pad, df, df_pad))  # pad with empty string feature
 
     df['char'] = df['char'].map(lambda x: CHARS_MAP.get(x, 80))
     df['type'] = df['type'].map(lambda x: CHAR_TYPES_MAP.get(x, 4))
@@ -208,3 +212,20 @@ def evaluate(best_processed_path, model):
     recall = recall_score(y_test, y_predict)
 
     return f1score, precision, recall
+
+
+def write_object_to_file(any_object, file_name):
+    with open(file_name, 'wb') as out_strm:
+        import dill
+        dill.dump(any_object, out_strm)
+    out_strm.close()
+    log('write {0} completed'.format(file_name))
+
+
+def log(text):
+    from time import gmtime, strftime
+    time_text = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    with open("log.txt", "a") as myfile:
+        output = "{0} {1}\n".format(time_text, text)
+        myfile.write(output)
+        print(output)
