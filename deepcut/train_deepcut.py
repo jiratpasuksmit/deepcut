@@ -229,3 +229,10 @@ def log(text):
         output = "{0} {1}\n".format(time_text, text)
         myfile.write(output)
         print(output)
+
+def read_object_from_file(file_name):
+    with open(file_name, 'rb') as in_strm:
+        import dill
+        object = dill.load(in_strm)
+    in_strm.close()
+    return object
