@@ -230,6 +230,7 @@ def log(text):
         myfile.write(output)
         print(output)
 
+
 def read_object_from_file(file_name):
     with open(file_name, 'rb') as in_strm:
         import dill
