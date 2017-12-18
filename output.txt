@@ -1,0 +1,4 @@
+Save article to CSV file
+Save encyclopedia to CSV file
+Save news to CSV file
+Save novel to CSV file

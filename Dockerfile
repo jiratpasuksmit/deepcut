@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine/git:1.0.4
 
 # Here we use several hacks collected from https://github.com/gliderlabs/docker-alpine/issues/11:
 # 1. install GLibc (which is not the cleanest solution at all)
@@ -33,7 +33,6 @@ RUN conda install -y numpy libgcc freetype pyzmq swig scipy
 # jupyter matplotlib requests ipykernel
 # RUN python -m ipykernel.kernelspec
 RUN pip install https://pypi.python.org/packages/7d/d0/96269b9ecfcc55cb38779831595e0521c34ef4ecdeba08b1ba4194cc4813/tensorflow-1.2.1-cp36-cp36m-manylinux1_x86_64.whl#md5=525ab154b9e177f84fc7e15a38f891ff
-
 RUN pip install deepcut
 
 COPY keras.json /root/.keras/

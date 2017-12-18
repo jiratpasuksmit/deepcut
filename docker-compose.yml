@@ -1,0 +1,9 @@
+version: "2.0"
+services:
+  deepcut:
+    build: .
+    ports:
+      - 8888:8888
+    volumes:
+      - /Users/jp/deepcut:/notebooks
+
