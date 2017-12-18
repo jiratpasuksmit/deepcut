@@ -1,6 +1,6 @@
 import os, sys
 import pandas as pd
-
+sys.setrecursionlimit(2147483647)
 sys.path.append('/Users/jp/deepcut/deepcut')
 sys.path.append('../deepcut')
 
