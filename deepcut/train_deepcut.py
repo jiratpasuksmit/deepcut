@@ -215,6 +215,7 @@ def evaluate(best_processed_path, model):
 
 
 def write_object_to_file(any_object, file_name):
+    log('writing {0} '.format(file_name))
     with open(file_name, 'wb') as out_strm:
         import dill
         dill.dump(any_object, out_strm)

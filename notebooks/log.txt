@@ -1,0 +1,3 @@
+2017-12-19 06:05:38 writing model.data 
+2017-12-19 08:15:33 writing model.data 
+2017-12-19 08:15:37 write model.data completed
