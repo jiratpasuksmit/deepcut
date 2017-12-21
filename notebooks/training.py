@@ -10,4 +10,7 @@ generate_best_dataset('input')
 
 model = train_model('cleaned_data')
 write_object_to_file(model, 'model.data')
-evaluate('cleaned_data', model)
+f1score, precision, recall = evaluate('cleaned_data', model)
+log("F1 {0}".format(f1score))
+log("precision {0}".format(precision))
+log("recall {0}".format(recall))
