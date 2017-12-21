@@ -163,6 +163,7 @@ def train_model(best_processed_path, weight_path='../weight/model_weight.h5', ve
     model: keras model, keras model for tokenize prediction
     """
 
+    log("1 PREPARE DATA")
     x_train_char, x_train_type, y_train = prepare_feature(best_processed_path, option='train')
     x_test_char, x_test_type, y_test = prepare_feature(best_processed_path, option='test')
 
@@ -184,17 +185,21 @@ def train_model(best_processed_path, weight_path='../weight/model_weight.h5', ve
     ]
 
     # train model
+    log("2 TRAIN MODEL")
     model = get_convo_nn2()
     train_params = [(10, 256), (3, 512), (3, 2048), (3, 4096), (3, 8192)]
     for (epochs, batch_size) in train_params:
-        print("train with {} epochs and {} batch size".format(epochs, batch_size))
+        log("train with {} epochs and {} batch size".format(epochs, batch_size))
         if validation_set:
+            log("3 VALIDATION SET")
             model.fit([x_train_char, x_train_type], y_train, epochs=epochs, batch_size=batch_size, verbose=verbose,
                       callbacks=callbacks_list,
                       validation_data=([x_val_char, x_val_type], y_val))
         else:
+            log("3 VALIDATION SET ELSE")
             model.fit([x_train_char, x_train_type], y_train, epochs=epochs, batch_size=batch_size, verbose=verbose,
                       callbacks=callbacks_list)
+    log("4 FINISH TRAIN, RETURNING")
     return model
 
 
